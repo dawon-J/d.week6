@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>d.week6</title>
+    <style type="text/css">
+        @import url('https://fonts.googleapis.com/css2?family=Pixelify+Sans&display=swap');
+        body {
+            font-family: 'Pixelify Sans', cursive;
+            padding: 0;
+            margin: 0
+        }
+    </style>
+</head>
+<body>
+
+<script type="text/javascript">
+    window.onload = function() {
+        var textContainer = document.createElement("div");
+        textContainer.style.position = "absolute";
+        textContainer.style.top = "0";
+        textContainer.style.left = "0";
+        textContainer.style.color = "blue";
+        textContainer.style.lineHeight = "130%";
+        textContainer.style.fontSize = "60px"; // Reduce font size for better visibility
+
+        var canvas = document.createElement("canvas");
+        canvas.id = "graphCanvas";
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+
+        document.body.innerHTML = "";
+        document.body.appendChild(textContainer);
+        document.body.appendChild(canvas);
+
+        var ctx = canvas.getContext("2d");
+
+        window.onmousemove = function(e) {
+
+            var canvasRect = canvas.getBoundingClientRect();
+            var mouseX = e.clientX - canvasRect.left;
+            var mouseY = e.clientY - canvasRect.top;
+
+            textContainer.innerHTML =
+                "clientX = " + e.clientX + "<br>" +
+                "clientY = " + e.clientY + "<br>" +
+                "scrollX = " + window.scrollX + "<br>" +
+                "scrollY = " + window.scrollY + "<br>" +
+                "movementX= " + e.movementX + "<br>" +
+                "movementY= " + e.movementY + "<br>" +
+                "timeStamp = " + e.timeStamp;
+
+            var red = e.clientX % 256;
+            var green = (e.clientY + e.clientX) % 256;
+            var blue = e.clientY % 100;
+            document.body.style.backgroundColor = "rgb(" + red + "," + green + "," + blue + ")";
+
+            // 그래프 그리기
+            drawGraph(ctx, mouseX, mouseY);
+        };
+    };
+
+    function drawGraph(ctx, x, y) {
+        // 현재 그래픽 컨텍스트 지우기
+        ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
+        ctx.lineWidth = 3;
+        // X축 및 Y축 그리기
+        ctx.beginPath();
+        ctx.moveTo(0, y);
+        ctx.lineTo(ctx.canvas.width, y);
+        ctx.moveTo(x, 0);
+        ctx.lineTo(x, ctx.canvas.height);
+        ctx.strokeStyle = "blue"; // 선 색상
+        ctx.stroke();
+
+        // 교차 지점에 동그라미 그리기
+        ctx.beginPath();
+        ctx.arc(x, y, 8, 0, 2 * Math.PI);
+        ctx.fillStyle = "blue"; // 동그라미의 색상
+        ctx.fill();
+        ctx.stroke();
+    }
+</script>
+
+</body>
+</html>
